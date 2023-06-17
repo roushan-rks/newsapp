@@ -26,33 +26,45 @@ constructor(){
     }
 }
 async componentDidMount(){
+  this.props.setProgress(0);
     let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=19bccaa0c22347ba9ce63a239d359ce5&page=1&pageSize=${this.props.pageSize}`;
     this.setState({loading:true});
+    this.props.setProgress(30);
     let data = await fetch(url);
     let parseData = await data.json();
+    this.props.setProgress(70);
     this.setState({articles:parseData.articles,total:parseData.totalResults,loading:false});
+    this.props.setProgress(100);
 }  
 handleNextClick = async ()=>{
- 
   if(Math.ceil(this.state.total/this.props.pageSize)>=this.state.page+1){
     window.scrollTo({top: 0, left: 0, behavior: 'smooth'});
+    this.props.setProgress(0);
     let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=19bccaa0c22347ba9ce63a239d359ce5&page=${this.state.page+1}&pageSize=${this.props.pageSize}`;
     this.setState({loading:true});
+    this.props.setProgress(30);
     let data = await fetch(url);
     let parseData = await data.json();
+    this.props.setProgress(70);
     this.setState({articles:parseData.articles,page:this.state.page+1,loading:false}); 
     console.log("next click")
+    this.props.setProgress(100);
 
   }
 
 }
 handlePrevClick = async ()=>{
+
   window.scrollTo({top: 0, left: 0, behavior: 'smooth'});
+  this.props.setProgress(0);
   let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=19bccaa0c22347ba9ce63a239d359ce5&page=${this.state.page-1}&pageSize=${this.props.pageSize}`;
   this.setState({loading:true});
+  this.props.setProgress(30);
   let data = await fetch(url);
   let parseData = await data.json();
+  this.props.setProgress(70);
   this.setState({articles:parseData.articles,page:this.state.page-1,loading:false}); 
+  this.props.setProgress(100);
 }       
   render() {
     return (
